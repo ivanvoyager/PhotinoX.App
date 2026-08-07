@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "PhotinoX.App.Dashboard": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "PHOTINO_ENVIRONMENT": "Development"
+      },
+      "debugEngines": "managed,native"
+    }
+  }
+}

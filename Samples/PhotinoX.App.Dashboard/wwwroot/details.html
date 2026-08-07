@@ -1,0 +1,94 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Runtime Details</title>
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body class="details-page">
+  <main class="details-shell">
+    <header class="details-header">
+      <div class="hero-copy">
+        <p class="eyebrow">PhotinoX.App Dashboard</p>
+        <h1>Runtime Details</h1>
+        <p class="subtitle">Detailed snapshot from the .NET host service.</p>
+      </div>
+
+      <div class="hero-actions">
+        <button id="close-button" type="button">Close</button>
+      </div>
+    </header>
+
+    <section class="details-grid" aria-label="Runtime details">
+      <article class="card details-environment-card">
+        <h2>Environment</h2>
+        <dl>
+          <div>
+            <dt>Application</dt>
+            <dd id="details-app-name">-</dd>
+          </div>
+          <div>
+            <dt>Environment</dt>
+            <dd id="details-environment">-</dd>
+          </div>
+          <div>
+            <dt>Content root</dt>
+            <dd id="details-content-root" class="wrap-value">-</dd>
+          </div>
+          <div>
+            <dt>Web root</dt>
+            <dd id="details-web-root" class="wrap-value">-</dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="card details-runtime-card">
+        <h2>Runtime</h2>
+        <dl>
+          <div>
+            <dt>Time</dt>
+            <dd id="details-time">-</dd>
+          </div>
+          <div>
+            <dt>Uptime</dt>
+            <dd id="details-uptime">-</dd>
+          </div>
+          <div>
+            <dt>Managed</dt>
+            <dd id="details-managed-memory">-</dd>
+          </div>
+          <div>
+            <dt>Native</dt>
+            <dd id="details-native-memory">-</dd>
+          </div>
+          <div>
+            <dt>Private</dt>
+            <dd id="details-private-memory">-</dd>
+          </div>
+          <div>
+            <dt>CPU</dt>
+            <dd id="details-cpu">-</dd>
+          </div>
+          <div>
+            <dt>Threads</dt>
+            <dd id="details-threads">-</dd>
+          </div>
+          <div>
+            <dt>GC collections</dt>
+            <dd id="details-gc">-</dd>
+          </div>
+        </dl>
+      </article>
+
+      <article class="card details-rawcard">
+        <h2>Raw snapshot</h2>
+        <pre id="rawshot">{}</pre>
+      </article>
+    </section>
+  </main>
+
+  <script src="js/host-bridge.js"></script>
+  <script src="js/details.js"></script>
+</body>
+</html>
