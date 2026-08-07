@@ -1,7 +1,7 @@
 ﻿namespace PhotinoX.App;
 
 /// <summary>
-/// Options for configuring the behavior for <see cref="PhotinoAppExtensions.CreateBuilder(PhotinoAppOptions)"/>.
+/// Options for configuring the behavior for <see cref="PhotinoAppExtensions.CreateBuilder(PhotinoAppOptions, bool)"/>.
 /// </summary>
 public class PhotinoAppOptions
 {
