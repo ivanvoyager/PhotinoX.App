@@ -278,7 +278,7 @@ var app = builder.Build();
 var service = app.Services.GetRequiredService<MyService>();
 ```
 
-Default builder configuration enables console logging and reads logging settings from the `Logging` configuration section.
+Default builder configuration enables console logging and reads settings from the `Logging` configuration section.
 
 ```json
 {
@@ -308,9 +308,7 @@ builder.ConfigureContainer(factory, container =>
 
 ## Ecosystem
 
-`PhotinoX.App` does not replace the `PhotinoX` API.
-
-`PhotinoApplication` owns the native desktop lifetime, dispatcher, windows, and message loop. `PhotinoX.App` adds a lightweight application composition layer around it.
+`PhotinoX.App` does not replace the `PhotinoX` API. `PhotinoApplication` owns the native desktop lifetime, dispatcher, windows, and message loop. `PhotinoX.App` adds a lightweight application composition layer around it.
 
 Use `PhotinoX` directly for minimal or fully manual applications. Use `PhotinoX.App` when the app needs a modern .NET-style startup model on top of `PhotinoX`.
 
@@ -333,7 +331,7 @@ dotnet add package PhotinoX.App
 
 ## Samples
 
-- https://github.com/ivanvoyager/PhotinoX.App/tree/master/Samples
+- [Samples](https://github.com/ivanvoyager/PhotinoX.App/tree/master/Samples)
 
 ## Requirements
 
