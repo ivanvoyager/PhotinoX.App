@@ -19,6 +19,7 @@ Application-level builder, dependency injection, configuration, logging, environ
 - application initialization services
 - bindable `PhotinoX` settings from configuration
 - default and per-window configuration
+- Native AOT friendly configuration binding
 
 ## Quick start
 
@@ -33,10 +34,8 @@ builder.Configuration["PhotinoX:MainWindow:Window:Width"] = "900";
 builder.Configuration["PhotinoX:MainWindow:Window:Height"] = "600";
 builder.Configuration["PhotinoX:MainWindow:Window:StartUrl"] = "index.html";
 
-builder.UseMainWindow(_ =>
+builder.UseMainWindow(app =>
 {
-    var app = PhotinoApp.Current;
-
     return new PhotinoWindow()
         .ApplySettings(app.GetMainWindowConfiguration(), app.Environment);
 });
@@ -69,10 +68,8 @@ builder.ConfigureApplication(application =>
     application.ShutdownMode = PhotinoShutdownMode.OnMainWindowClose;
 });
 
-builder.UseMainWindow(_ =>
+builder.UseMainWindow(app =>
 {
-    var app = PhotinoApp.Current;
-
     return new PhotinoWindow()
         .ApplySettings(app.GetMainWindowConfiguration(), app.Environment);
 });

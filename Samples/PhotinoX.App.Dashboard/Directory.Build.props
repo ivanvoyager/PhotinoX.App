@@ -1,0 +1,17 @@
+<Project>
+  <!-- Imports -->
+  <Import Project="$(MSBuildThisFileDirectory)\..\..\Directory.Build.props" />
+
+  <PropertyGroup>
+    <DefaultItemExcludes>
+      $(DefaultItemExcludes);
+      obj\**;
+      obj-fluent\**
+    </DefaultItemExcludes>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="$([System.String]::Copy('$(MSBuildProjectName)').ToUpperInvariant().EndsWith('FLUENT'))">
+    <MSBuildProjectExtensionsPath>obj-fluent\</MSBuildProjectExtensionsPath>
+    <BaseIntermediateOutputPath>obj-fluent\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+</Project>

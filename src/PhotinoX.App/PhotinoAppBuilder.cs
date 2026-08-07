@@ -22,7 +22,7 @@ public sealed class PhotinoAppBuilder
 
     private Func<IServiceProvider>? _createServiceProvider;
     private Action<PhotinoApplication>? _configureApplication;
-    private Func<IServiceProvider, PhotinoWindow>? _mainWindowFactory;
+    private Func<PhotinoApp, PhotinoWindow>? _mainWindowFactory;
 
     internal PhotinoAppBuilder(PhotinoAppOptions appOptions, bool useDefaults = true)
     {
@@ -171,10 +171,10 @@ public sealed class PhotinoAppBuilder
     /// Configures the factory used to create the application's main window.
     /// </summary>
     /// <param name="factory">
-    /// A factory that creates the main <see cref="PhotinoWindow"/> using the application's root service provider.
+    /// A factory that creates the main <see cref="PhotinoWindow"/> using the built <see cref="PhotinoApp"/>.
     /// </param>
     /// <returns>The current <see cref="PhotinoAppBuilder"/>.</returns>
-    public PhotinoAppBuilder UseMainWindow(Func<IServiceProvider, PhotinoWindow> factory)
+    public PhotinoAppBuilder UseMainWindow(Func<PhotinoApp, PhotinoWindow> factory)
     {
         ArgumentNullException.ThrowIfNull(factory);
         _mainWindowFactory = factory;

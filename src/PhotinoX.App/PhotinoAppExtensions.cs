@@ -2,6 +2,9 @@
 
 namespace PhotinoX.App;
 
+/// <summary>
+/// Provides factory and initialization extension methods for <see cref="PhotinoApp"/>.
+/// </summary>
 public static class PhotinoAppExtensions
 {
     extension (PhotinoApp app)
@@ -15,9 +18,12 @@ public static class PhotinoAppExtensions
             new PhotinoAppBuilder(new() { Args = args }).Build();
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PhotinoAppBuilder"/> class with optional defaults.
+        /// Creates a new <see cref="PhotinoAppBuilder"/> instance.
         /// </summary>
         /// <param name="args">The command line arguments.</param>
+        /// <param name="useDefaults">
+        /// <see langword="true"/> to configure default configuration sources, logging, and application settings binding; otherwise, <see langword="false"/>.
+        /// </param>
         /// <returns>The <see cref="PhotinoAppBuilder"/>.</returns>
         public static PhotinoAppBuilder CreateBuilder(string[]? args = null, bool useDefaults = true) =>
             new(new() { Args = args }, useDefaults);

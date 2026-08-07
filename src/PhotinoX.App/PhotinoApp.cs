@@ -15,7 +15,7 @@ namespace PhotinoX.App;
 /// </remarks>
 public sealed class PhotinoApp : IDisposable, IAsyncDisposable
 {
-    private readonly Func<IServiceProvider, PhotinoWindow>? _mainWindowFactory;
+    private readonly Func<PhotinoApp, PhotinoWindow>? _mainWindowFactory;
     private int _disposed;
     private int _appServicesInitialized;
 
@@ -24,7 +24,7 @@ public sealed class PhotinoApp : IDisposable, IAsyncDisposable
     internal PhotinoApp(
         IServiceProvider services,
         PhotinoApplication application,
-        Func<IServiceProvider, PhotinoWindow>? mainWindowFactory = null)
+        Func<PhotinoApp, PhotinoWindow>? mainWindowFactory = null)
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(application);
@@ -88,7 +88,7 @@ public sealed class PhotinoApp : IDisposable, IAsyncDisposable
         if (_mainWindowFactory is null)
             throw new InvalidOperationException("No main window configured.");
 
-        return _mainWindowFactory(Services);
+        return _mainWindowFactory(this);
     }
 
     /// <summary>

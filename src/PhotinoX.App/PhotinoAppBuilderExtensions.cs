@@ -4,6 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace PhotinoX.App;
 
+/// <summary>
+/// Provides extension methods for configuring <see cref="PhotinoAppBuilder"/> instances.
+/// </summary>
 public static class PhotinoAppBuilderExtensions
 {
     extension(PhotinoAppBuilder builder)
