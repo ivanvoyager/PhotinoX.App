@@ -206,6 +206,18 @@ public sealed class PhotinoAppBuilder
         var appSettings = serviceProvider.GetService<IOptions<PhotinoAppSettings>>()?.Value;
 
         var application = new PhotinoApplication();
+        if (!string.IsNullOrWhiteSpace(appSettings?.ApplicationName))
+        {
+            application.Name = appSettings.ApplicationName;
+        }
+        if (appSettings?.NotificationsEnabled is { } notificationsEnabled)
+        {
+            application.NotificationsEnabled = notificationsEnabled;
+        }
+        if (!string.IsNullOrWhiteSpace(appSettings?.NotificationRegistrationId))
+        {
+            application.NotificationRegistrationId = appSettings.NotificationRegistrationId;
+        }
         if (!string.IsNullOrWhiteSpace(appSettings?.Runtime.WebView2RuntimePath))
         {
             application.SetWebView2RuntimePath(appSettings.Runtime.WebView2RuntimePath);

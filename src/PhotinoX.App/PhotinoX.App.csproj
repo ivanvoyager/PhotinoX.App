@@ -4,6 +4,7 @@
     <TargetFrameworks>net10.0;net9.0;net8.0</TargetFrameworks>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Description>Application builder, dependency injection, configuration, logging, environment, and window settings for PhotinoX desktop applications.</Description>
     <RootNamespace>PhotinoX.App</RootNamespace>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591;NETSDK1233</NoWarn>

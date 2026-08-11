@@ -14,7 +14,7 @@
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/ivanvoyager/PhotinoX.App</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageTags>native;webview;webview2;photino;photinox;desktop;cross-platform;dotnet</PackageTags>
+    <PackageTags>photino;photinox;desktop;cross-platform;dotnet;app-builder;dependency-injection;configuration;logging;webview;webview2</PackageTags>
   </PropertyGroup>
 
   <!-- SourceLink -->
