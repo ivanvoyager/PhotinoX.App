@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/github/license/ivanvoyager/PhotinoX.App?label=license)](https://github.com/ivanvoyager/PhotinoX.App/blob/master/LICENSE)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/PhotinoX.App.svg)](https://www.nuget.org/packages/PhotinoX.App)
 
-Application-level builder, dependency injection, configuration, logging, environment, and window settings APIs for [PhotinoX](https://github.com/ivanvoyager/PhotinoX) desktop applications.
+Application builder, dependency injection, configuration, logging, environment, and window settings APIs for [PhotinoX](https://github.com/ivanvoyager/PhotinoX) desktop applications.
 
 `PhotinoX` provides the low-level native-first application, dispatcher, and window API. `PhotinoX.App` adds the application composition layer around it: services, configuration, logging, environment paths, initialization services, and reusable window settings.
 
@@ -16,6 +16,7 @@ Application-level builder, dependency injection, configuration, logging, environ
 - logging through `ILoggingBuilder`
 - application environment through `PhotinoEnvironment`
 - main-window factory support
+- underlying `PhotinoApplication` configuration
 - application initialization services
 - bindable `PhotinoX` settings from configuration
 - default and per-window configuration
@@ -56,7 +57,7 @@ builder.Environment
 builder.Logging
 ```
 
-The builder can configure services, application-level callbacks, the main-window factory, application initialization behavior, and custom service-provider creation.
+The builder can configure services, the underlying `PhotinoApplication`, the main-window factory, application initialization behavior, and custom service-provider creation.
 
 Example using the `appsettings.json` configuration shown below:
 
@@ -66,6 +67,14 @@ var builder = PhotinoApp.CreateBuilder(args);
 builder.ConfigureApplication(application =>
 {
     application.ShutdownMode = PhotinoShutdownMode.OnMainWindowClose;
+
+    application.ShutdownRequested += (_, e) =>
+    {
+        if (e.Reason == PhotinoShutdownRequestReason.Application)
+        {
+            // e.Cancel = true;
+        }
+    };
 });
 
 builder.UseMainWindow(app =>
