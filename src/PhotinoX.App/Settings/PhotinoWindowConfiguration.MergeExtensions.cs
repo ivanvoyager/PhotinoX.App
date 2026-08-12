@@ -107,8 +107,6 @@ public static class PhotinoWindowConfigurationMergeExtensions
             return new PhotinoWin32Settings
             {
                 UserDataFolder = overrides.UserDataFolder ?? defaults.UserDataFolder,
-                NotificationsEnabled = overrides.NotificationsEnabled ?? defaults.NotificationsEnabled,
-                NotificationRegistrationId = overrides.NotificationRegistrationId ?? defaults.NotificationRegistrationId,
                 UseNativeWindowOwner = overrides.UseNativeWindowOwner ?? defaults.UseNativeWindowOwner
             };
         }

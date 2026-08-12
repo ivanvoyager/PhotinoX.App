@@ -11,6 +11,16 @@ public sealed class PhotinoAppSettings
     public string? ApplicationName { get; set; }
 
     /// <summary>
+    /// Gets or sets whether native notifications are enabled.
+    /// </summary>
+    public bool? NotificationsEnabled { get; set; }
+
+    /// <summary>
+    /// Gets or sets the Windows notification registration identifier.
+    /// </summary>
+    public string? NotificationRegistrationId { get; set; }
+
+    /// <summary>
     /// Gets or sets the application content root path.
     /// </summary>
     public string? ContentRootPath { get; set; }

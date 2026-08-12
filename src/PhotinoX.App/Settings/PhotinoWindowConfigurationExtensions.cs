@@ -98,37 +98,37 @@ public static class PhotinoWindowConfigurationExtensions
             if (settings.Title is not null)
                 window.SetTitle(settings.Title);
 
-            if (settings.UseOsDefaultSize is bool useOsDefaultSize)
+            if (settings.UseOsDefaultSize is { } useOsDefaultSize)
                 window.UseOsDefaultSize = useOsDefaultSize;
 
-            if (settings.UseOsDefaultLocation is bool useOsDefaultLocation)
+            if (settings.UseOsDefaultLocation is { } useOsDefaultLocation)
                 window.UseOsDefaultLocation = useOsDefaultLocation;
 
-            if (settings.Width is int width)
+            if (settings.Width is { } width)
                 window.SetWidth(width);
 
-            if (settings.Height is int height)
+            if (settings.Height is { } height)
                 window.SetHeight(height);
 
-            if (settings.Left is int left)
+            if (settings.Left is { } left)
                 window.SetLeft(left);
 
-            if (settings.Top is int top)
+            if (settings.Top is { } top)
                 window.SetTop(top);
 
-            if (settings.CenterOnInitialize is bool center)
+            if (settings.CenterOnInitialize is { } center)
                 window.CenterOnInitialize = center;
 
-            if (settings.Resizable is bool resizable)
+            if (settings.Resizable is { } resizable)
                 window.SetResizable(resizable);
 
-            if (settings.Chromeless is bool chromeless)
+            if (settings.Chromeless is { } chromeless)
                 window.SetChromeless(chromeless);
 
-            if (settings.Transparent is bool transparent)
+            if (settings.Transparent is { } transparent)
                 window.SetTransparent(transparent);
 
-            if (settings.Topmost is bool topmost)
+            if (settings.Topmost is { } topmost)
                 window.SetTopmost(topmost);
 
             if (settings.IconFile is not null)
@@ -166,40 +166,40 @@ public static class PhotinoWindowConfigurationExtensions
             if (settings.BrowserControlInitParameters is not null)
                 window.SetBrowserControlInitParameters(settings.BrowserControlInitParameters);
 
-            if (settings.ContextMenuEnabled is bool contextMenuEnabled)
+            if (settings.ContextMenuEnabled is { } contextMenuEnabled)
                 window.SetContextMenuEnabled(contextMenuEnabled);
 
-            if (settings.ZoomEnabled is bool zoomEnabled)
+            if (settings.ZoomEnabled is { } zoomEnabled)
                 window.SetZoomEnabled(zoomEnabled);
 
-            if (settings.Zoom is int zoom)
+            if (settings.Zoom is { } zoom)
                 window.SetZoom(zoom);
 
-            if (settings.DevToolsEnabled is bool devToolsEnabled)
+            if (settings.DevToolsEnabled is { } devToolsEnabled)
                 window.SetDevToolsEnabled(devToolsEnabled);
 
-            if (settings.GrantBrowserPermissions is bool grantBrowserPermissions)
+            if (settings.GrantBrowserPermissions is { } grantBrowserPermissions)
                 window.SetGrantBrowserPermissions(grantBrowserPermissions);
 
-            if (settings.MediaAutoplayEnabled is bool mediaAutoplayEnabled)
+            if (settings.MediaAutoplayEnabled is { } mediaAutoplayEnabled)
                 window.SetMediaAutoplayEnabled(mediaAutoplayEnabled);
 
-            if (settings.FileSystemAccessEnabled is bool fileSystemAccessEnabled)
+            if (settings.FileSystemAccessEnabled is { } fileSystemAccessEnabled)
                 window.SetFileSystemAccessEnabled(fileSystemAccessEnabled);
 
-            if (settings.WebSecurityEnabled is bool webSecurityEnabled)
+            if (settings.WebSecurityEnabled is { } webSecurityEnabled)
                 window.SetWebSecurityEnabled(webSecurityEnabled);
 
-            if (settings.JavascriptClipboardAccessEnabled is bool javascriptClipboardAccessEnabled)
+            if (settings.JavascriptClipboardAccessEnabled is { } javascriptClipboardAccessEnabled)
                 window.SetJavascriptClipboardAccessEnabled(javascriptClipboardAccessEnabled);
 
-            if (settings.MediaStreamEnabled is bool mediaStreamEnabled)
+            if (settings.MediaStreamEnabled is { } mediaStreamEnabled)
                 window.SetMediaStreamEnabled(mediaStreamEnabled);
 
-            if (settings.SmoothScrollingEnabled is bool smoothScrollingEnabled)
+            if (settings.SmoothScrollingEnabled is { } smoothScrollingEnabled)
                 window.SetSmoothScrollingEnabled(smoothScrollingEnabled);
 
-            if (settings.IgnoreCertificateErrorsEnabled is bool ignoreCertificateErrorsEnabled)
+            if (settings.IgnoreCertificateErrorsEnabled is { } ignoreCertificateErrorsEnabled)
                 window.SetIgnoreCertificateErrorsEnabled(ignoreCertificateErrorsEnabled);
 
             return window;
@@ -221,13 +221,7 @@ public static class PhotinoWindowConfigurationExtensions
             if (settings.UserDataFolder is not null)
                 window.SetUserDataFolder(settings.UserDataFolder);
 
-            if (settings.NotificationsEnabled is bool notificationsEnabled)
-                window.SetNotificationsEnabled(notificationsEnabled);
-
-            if (settings.NotificationRegistrationId is not null)
-                window.SetNotificationRegistrationId(settings.NotificationRegistrationId);
-
-            if (settings.UseNativeWindowOwner is bool useNativeWindowOwner)
+            if (settings.UseNativeWindowOwner is { } useNativeWindowOwner)
                 window.SetUseNativeWindowOwner(useNativeWindowOwner);
 
             return window;
@@ -246,9 +240,9 @@ public static class PhotinoWindowConfigurationExtensions
             ArgumentNullException.ThrowIfNull(window);
             ArgumentNullException.ThrowIfNull(settings);
 
-            if (settings.ChromelessDragRegionHeight is int ||
-                settings.ChromelessDragRegionLeftInset is int ||
-                settings.ChromelessDragRegionRightInset is int)
+            if (settings.ChromelessDragRegionHeight is not null ||
+                settings.ChromelessDragRegionLeftInset is not null ||
+                settings.ChromelessDragRegionRightInset is not null)
             {
                 var current = window.LinuxChromelessSettings;
 
@@ -258,7 +252,7 @@ public static class PhotinoWindowConfigurationExtensions
                     settings.ChromelessDragRegionLeftInset ?? current.DragRegionLeftInset);
             }
 
-            if (settings.ChromelessResizeBorderThickness is int resizeBorderThickness)
+            if (settings.ChromelessResizeBorderThickness is { } resizeBorderThickness)
                 window.SetLinuxChromelessResizeBorderThickness(resizeBorderThickness);
 
             return window;
