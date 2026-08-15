@@ -8,7 +8,7 @@ public sealed record DashboardHostMessage(
 
 public sealed record DashboardSnapshot(
     DashboardApplicationSnapshot Application,
-    DashboardPlatformSnapshot Platform,
+    DashboardPhotinoRuntimeSnapshot PhotinoRuntime,
     DashboardRuntimeSnapshot Runtime,
     DashboardConfigurationSnapshot Configuration,
     DashboardWindowSnapshot[] Windows);
@@ -19,10 +19,19 @@ public sealed record DashboardApplicationSnapshot(
     string InitializedAt,
     string Status);
 
-public sealed record DashboardPlatformSnapshot(
-    string OsDescription,
+public sealed record DashboardPhotinoRuntimeSnapshot(
+    string NativeVersion,
+    string WebViewEngine,
+    string WebViewRuntimeVersion,
+    string OSDescription,
+    string OSArchitecture,
     string ProcessArchitecture,
-    string DotnetVersion);
+    string FrameworkDescription,
+    DashboardRuntimeInfoItem[] PlatformDetails);
+
+public sealed record DashboardRuntimeInfoItem(
+    string Name,
+    string Value);
 
 public sealed record DashboardRuntimeSnapshot(
     string CurrentTime,

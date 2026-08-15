@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.Options;
-using PhotinoX.App;
+using Photino.NET;
 
 namespace PhotinoX.App.Dashboard;
 
@@ -32,6 +32,8 @@ public sealed class DashboardSnapshotService
     {
         _process.Refresh();
 
+        var photinoRuntimeInfo = PhotinoApplication.Current.GetRuntimeInfo();
+
         var now = DateTimeOffset.Now;
         var managedMemory = GC.GetTotalMemory(false);
         var privateMemory = _process.PrivateMemorySize64;
@@ -43,10 +45,7 @@ public sealed class DashboardSnapshotService
                 EnvironmentName: _environment.EnvironmentName,
                 InitializedAt: FormatDateTime(_state.InitializedAt),
                 Status: _state.InitializedAt is null ? "Starting" : "Ready"),
-            Platform: new DashboardPlatformSnapshot(
-                OsDescription: GetShortOsDescription(),
-                ProcessArchitecture: RuntimeInformation.ProcessArchitecture.ToString(),
-                DotnetVersion: Environment.Version.ToString()),
+            PhotinoRuntime: CreatePhotinoRuntimeSnapshot(photinoRuntimeInfo),
             Runtime: new DashboardRuntimeSnapshot(
                 CurrentTime: now.ToString("HH:mm:ss"),
                 Uptime: FormatDuration(now - _state.StartedAt),
@@ -67,6 +66,41 @@ public sealed class DashboardSnapshotService
                     ? "WindowDefaults + Windows[\"Details\"]"
                     : "Not configured"),
             Windows: CreateWindowSnapshots(app));
+    }
+
+    private static DashboardPhotinoRuntimeSnapshot CreatePhotinoRuntimeSnapshot(PhotinoRuntimeInfo runtimeInfo)
+    {
+        return new DashboardPhotinoRuntimeSnapshot(
+            NativeVersion: runtimeInfo.NativeVersion,
+            WebViewEngine: runtimeInfo.WebViewEngine,
+            WebViewRuntimeVersion: runtimeInfo.WebViewRuntimeVersion ?? "-",
+            OSDescription: runtimeInfo.OSDescription,
+            OSArchitecture: runtimeInfo.OSArchitecture,
+            ProcessArchitecture: runtimeInfo.ProcessArchitecture.ToLowerInvariant(),
+            FrameworkDescription: runtimeInfo.FrameworkDescription,
+            PlatformDetails: CreatePlatformDetails(runtimeInfo));
+    }
+
+    private static DashboardRuntimeInfoItem[] CreatePlatformDetails(PhotinoRuntimeInfo runtimeInfo)
+    {
+        return runtimeInfo.Platform switch
+        {
+            PhotinoRuntimePlatform.Windows => [],
+
+            PhotinoRuntimePlatform.Linux =>
+            [
+                new DashboardRuntimeInfoItem(
+                    "GTK",
+                    runtimeInfo.Linux.GtkVersion ?? "-"),
+                new DashboardRuntimeInfoItem(
+                    "WebKitGTK API",
+                    runtimeInfo.Linux.WebKitGtkApiTarget ?? "-")
+            ],
+
+            PhotinoRuntimePlatform.MacOS => [],
+
+            _ => []
+        };
     }
 
     private DashboardWindowSnapshot[] CreateWindowSnapshots(PhotinoApp app)
@@ -141,20 +175,6 @@ public sealed class DashboardSnapshotService
         {
             return 0;
         }
-    }
-
-    private static string GetShortOsDescription()
-    {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            return $"Windows {Environment.OSVersion.Version}";
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            return $"macOS {Environment.OSVersion.Version}";
-
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            return RuntimeInformation.OSDescription.Replace("GNU/Linux", "Linux", StringComparison.OrdinalIgnoreCase);
-
-        return RuntimeInformation.OSDescription;
     }
 
     private static string FormatDateTime(DateTimeOffset? value)

@@ -140,6 +140,10 @@ h1 {
   grid-area: platform;
 }
 
+#platform-runtime-details {
+    display: contents;
+}
+
 .card-runtime {
   grid-area: runtime;
 }
