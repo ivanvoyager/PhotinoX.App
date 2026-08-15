@@ -6,9 +6,11 @@
         environmentName: document.getElementById("environment-name"),
         initializedAt: document.getElementById("initialized-at"),
 
-        osDescription: document.getElementById("os-description"),
+        nativeVersion: document.getElementById("native-version"),
+        webViewEngine: document.getElementById("webview-engine"),
+        webViewRuntime: document.getElementById("webview-runtime"),
+        platformRuntimeDetails: document.getElementById("platform-runtime-details"),
         processArchitecture: document.getElementById("process-architecture"),
-        dotnetVersion: document.getElementById("dotnet-version"),
 
         currentTime: document.getElementById("current-time"),
         uptime: document.getElementById("uptime"),
@@ -36,9 +38,14 @@
         setText(elements.environmentName, snapshot.application.environmentName);
         setText(elements.initializedAt, snapshot.application.initializedAt);
 
-        setText(elements.osDescription, snapshot.platform.osDescription);
-        setText(elements.processArchitecture, snapshot.platform.processArchitecture);
-        setText(elements.dotnetVersion, snapshot.platform.dotnetVersion);
+        const photino = snapshot.photinoRuntime;
+
+        setText(elements.nativeVersion, photino.nativeVersion);
+        setText(elements.webViewEngine, photino.webViewEngine);
+        setText(elements.webViewRuntime, photino.webViewRuntimeVersion);
+        setText(elements.processArchitecture, photino.processArchitecture);
+
+        renderPlatformDetails(photino.platformDetails);
 
         setText(elements.currentTime, snapshot.runtime.currentTime);
         setText(elements.uptime, snapshot.runtime.uptime);
@@ -52,6 +59,22 @@
         setText(elements.detailsWindowConfig, snapshot.configuration.detailsWindow);
 
         renderWindows(snapshot.windows);
+    }
+
+    function renderPlatformDetails(items) {
+        if (!items || items.length === 0) {
+            elements.platformRuntimeDetails.innerHTML = "";
+            return;
+        }
+
+        elements.platformRuntimeDetails.innerHTML = items
+            .map(item => `
+          <div>
+            <dt>${escapeHtml(item.name)}</dt>
+            <dd title="${escapeHtml(item.value)}">${escapeHtml(item.value)}</dd>
+          </div>
+        `)
+            .join("");
     }
 
     function renderWindows(windows) {
