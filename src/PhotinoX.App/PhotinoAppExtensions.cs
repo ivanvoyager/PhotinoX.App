@@ -16,7 +16,7 @@ public static class PhotinoAppExtensions
         /// </param>
         /// <returns>The <see cref="PhotinoAppBuilder"/>.</returns>
         public static PhotinoAppBuilder CreateBuilder(string[]? args = null, bool useDefaults = true) =>
-            new(new() { Args = args }, useDefaults);
+            PhotinoApp.CreateBuilder(new PhotinoAppOptions { Args = args }, useDefaults);
 
         /// <summary>
         /// Creates a new <see cref="PhotinoAppBuilder"/> instance using the specified options.

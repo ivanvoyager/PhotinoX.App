@@ -28,10 +28,13 @@ jobs:
             nuget-${{ runner.os }}-
 
       - name: Restore
-        run: dotnet restore src/PhotinoX.App/PhotinoX.App.csproj --nologo
+        run: dotnet restore --nologo
 
       - name: Build (Release)
-        run: dotnet build src/PhotinoX.App/PhotinoX.App.csproj -c Release --no-restore --nologo -warnaserror
+        run: dotnet build -c Release --no-restore --nologo -warnaserror
+
+      - name: Test (Release)
+        run: dotnet test --configuration Release --no-build
 
       - name: Pack (Release)
         run: dotnet pack src/PhotinoX.App/PhotinoX.App.csproj -c Release --no-build -o artifacts --nologo /p:IncludeSymbols=true /p:SymbolPackageFormat=snupkg /p:VersionSuffix=pre.${{ github.run_number }}

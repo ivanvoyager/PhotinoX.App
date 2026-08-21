@@ -14,16 +14,15 @@ public static class PhotinoWindowConfigurationExtensions
         /// including default window settings.
         /// </summary>
         /// <param name="settings">The application settings to apply.</param>
-        /// <param name="environment">The application environment used to resolve relative web asset paths.</param>
+        /// <param name="environment">The optional application environment used to resolve relative web asset paths.</param>
         /// <returns>The current <see cref="PhotinoWindow"/> instance.</returns>
         /// <exception cref="ArgumentNullException">
-        /// Thrown when <paramref name="settings"/> or <paramref name="environment"/> is <see langword="null"/>.
+        /// Thrown when <paramref name="settings"/> is <see langword="null"/>.
         /// </exception>
-        public PhotinoWindow ApplyMainWindowSettings(PhotinoAppSettings settings, PhotinoEnvironment environment)
+        public PhotinoWindow ApplyMainWindowSettings(PhotinoAppSettings settings, PhotinoEnvironment? environment = null)
         {
             ArgumentNullException.ThrowIfNull(window);
             ArgumentNullException.ThrowIfNull(settings);
-            ArgumentNullException.ThrowIfNull(environment);
 
             return window.ApplySettings(settings.WindowDefaults.MergeWith(settings.MainWindow), environment);
         }
@@ -34,10 +33,10 @@ public static class PhotinoWindowConfigurationExtensions
         /// </summary>
         /// <param name="settings">The application settings to apply.</param>
         /// <param name="name">The named window configuration to apply.</param>
-        /// <param name="environment">The application environment used to resolve relative web asset paths.</param>
+        /// <param name="environment">The optional application environment used to resolve relative web asset paths.</param>
         /// <returns>The current <see cref="PhotinoWindow"/> instance.</returns>
         /// <exception cref="ArgumentNullException">
-        /// Thrown when <paramref name="settings"/>, <paramref name="name"/>, or <paramref name="environment"/> is <see langword="null"/>.
+        /// Thrown when <paramref name="settings"/> or <paramref name="name"/> is <see langword="null"/>.
         /// </exception>
         /// <exception cref="ArgumentException">
         /// Thrown when <paramref name="name"/> is empty or whitespace.
@@ -45,12 +44,11 @@ public static class PhotinoWindowConfigurationExtensions
         /// <exception cref="KeyNotFoundException">
         /// Thrown when the named window configuration is not found.
         /// </exception>
-        public PhotinoWindow ApplyWindowSettings(PhotinoAppSettings settings, string name, PhotinoEnvironment environment)
+        public PhotinoWindow ApplyWindowSettings(PhotinoAppSettings settings, string name, PhotinoEnvironment? environment = null)
         {
             ArgumentNullException.ThrowIfNull(window);
             ArgumentNullException.ThrowIfNull(settings);
             ArgumentException.ThrowIfNullOrWhiteSpace(name);
-            ArgumentNullException.ThrowIfNull(environment);
 
             if (!settings.Windows.TryGetValue(name, out var configuration))
                 throw new KeyNotFoundException($"Window configuration '{name}' was not found.");
@@ -62,16 +60,15 @@ public static class PhotinoWindowConfigurationExtensions
         /// Applies the specified complete window configuration to the current <see cref="PhotinoWindow"/>.
         /// </summary>
         /// <param name="configuration">The window configuration to apply.</param>
-        /// <param name="environment">The application environment used to resolve relative web asset paths.</param>
+        /// <param name="environment">The optional application environment used to resolve relative web asset paths.</param>
         /// <returns>The current <see cref="PhotinoWindow"/> instance.</returns>
         /// <exception cref="ArgumentNullException">
-        /// Thrown when <paramref name="configuration"/> or <paramref name="environment"/> is <see langword="null"/>.
+        /// Thrown when <paramref name="configuration"/> is <see langword="null"/>.
         /// </exception>
-        public PhotinoWindow ApplySettings(PhotinoWindowConfiguration configuration, PhotinoEnvironment environment)
+        public PhotinoWindow ApplySettings(PhotinoWindowConfiguration configuration, PhotinoEnvironment? environment = null)
         {
             ArgumentNullException.ThrowIfNull(window);
             ArgumentNullException.ThrowIfNull(configuration);
-            ArgumentNullException.ThrowIfNull(environment);
 
             window.ApplySettings(configuration.Window, environment);
             window.ApplySettings(configuration.Browser);
@@ -85,7 +82,7 @@ public static class PhotinoWindowConfigurationExtensions
         /// Applies the specified window settings to the current <see cref="PhotinoWindow"/>.
         /// </summary>
         /// <param name="settings">The settings to apply.</param>
-        /// <param name="environment">The application environment used to resolve relative web asset paths.</param>
+        /// <param name="environment">The optional application environment used to resolve relative web asset paths.</param>
         /// <returns>The current <see cref="PhotinoWindow"/> instance.</returns>
         /// <exception cref="ArgumentNullException">
         /// Thrown when <paramref name="settings"/> is <see langword="null"/>.

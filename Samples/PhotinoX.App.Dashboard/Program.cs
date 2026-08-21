@@ -46,4 +46,6 @@ builder.ConfigureApplication(application =>
     application.ShutdownMode = PhotinoShutdownMode.OnMainWindowClose;
 });
 
-return builder.Build().Run();
+using var app = builder.Build();
+
+return app.Run();
