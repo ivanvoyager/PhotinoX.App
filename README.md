@@ -11,16 +11,18 @@ Application builder, dependency injection, configuration, logging, environment, 
 
 `PhotinoX` provides the low-level native-first application, dispatcher, and window API. `PhotinoX.App` adds the application composition layer around it: services, configuration, logging, environment paths, initialization services, and reusable window settings.
 
-- service registration through `IServiceCollection`
-- configuration through `ConfigurationManager`
-- logging through `ILoggingBuilder`
-- application environment through `PhotinoEnvironment`
-- main-window factory support
-- underlying `PhotinoApplication` configuration
-- application initialization services
-- bindable `PhotinoX` settings from configuration
-- default and per-window configuration
-- Native AOT friendly configuration binding
+- Service registration through `IServiceCollection`
+- Configuration through `ConfigurationManager`
+- Logging through `ILoggingBuilder`
+- Application environment through `PhotinoEnvironment`
+- Main-window factory support
+- Underlying `PhotinoApplication` configuration
+- Application initialization services
+- Bindable `PhotinoX` settings from configuration
+- Default and named window configuration
+- Callbacks before application services are disposed
+- Synchronous and asynchronous application disposal
+- Native AOT-friendly configuration binding
 
 ## Quick start
 
@@ -41,23 +43,30 @@ builder.UseMainWindow(app =>
         .ApplySettings(app.GetMainWindowConfiguration(), app.Environment);
 });
 
-return builder.Build().Run();
+using var app = builder.Build();
+return app.Run();
 ```
+
+`Build()` creates the application and its root service provider. `Run()` only runs the native application message loop and does not dispose the application. The caller must dispose the built application by using `using`, `await using`, `Dispose()`, or `DisposeAsync()`.
 
 ## Application builder
 
 `PhotinoAppBuilder` is the main composition object.
 
-It exposes:
+It provides:
 
-```csharp
-builder.Services
-builder.Configuration
-builder.Environment
-builder.Logging
-```
+- `Services`
+- `Configuration`
+- `Environment`
+- `Logging`
+- `ConfigureApplication(...)`
+- `ConfigureBeforeDispose(...)`
+- `ConfigureContainer(...)`
+- `UseMainWindow(...)`
+- `UseAppServicesInitialization(...)`
 
-The builder can configure services, the underlying `PhotinoApplication`, the main-window factory, application initialization behavior, and custom service-provider creation.
+
+The builder configures services, the underlying `PhotinoApplication`, the main-window factory, application initialization, pre-disposal callbacks, and custom service-provider creation.
 
 Example using the `appsettings.json` configuration shown below:
 
@@ -83,8 +92,39 @@ builder.UseMainWindow(app =>
         .ApplySettings(app.GetMainWindowConfiguration(), app.Environment);
 });
 
-return builder.Build().Run();
+using var app = builder.Build();
+return app.Run();
 ```
+
+### Application lifetime
+
+`PhotinoApp.Run()` runs the native application message loop. It does not dispose the application when the message loop exits.
+
+Use synchronous disposal:
+
+```csharp
+using var app = builder.Build();
+return app.Run();
+```
+
+Use asynchronous disposal when the application or registered services require asynchronous cleanup:
+
+```csharp
+await using var app = builder.Build();
+return app.Run();
+```
+
+Code that needs to run before application services are disposed can be registered through the builder:
+
+```csharp
+builder.ConfigureBeforeDispose(app =>
+{
+    var service = app.Services.GetRequiredService<MyService>();
+    service.SaveState();
+});
+```
+
+Callbacks are invoked in registration order. Application services remain available while callbacks execute. If a callback throws, subsequent callbacks are not invoked, but the root service provider is still disposed.
 
 ## Configuration
 
@@ -155,10 +195,15 @@ The `PhotinoX` configuration section is bound to `PhotinoAppSettings` and uses t
 
 ```text
 PhotinoX
-  Runtime
-  WindowDefaults
-  MainWindow
-  Windows[name]
+├── ApplicationName
+├── ContentRootPath
+├── WebRootPath
+├── NotificationsEnabled
+├── NotificationRegistrationId
+├── Runtime
+├── WindowDefaults
+├── MainWindow
+└── Windows[name]
 ```
 
 ### Window configuration
@@ -260,7 +305,7 @@ var builder = PhotinoApp.CreateBuilder(new PhotinoAppOptions
 // var builder = PhotinoApp.CreateBuilder(args)
 //     .UseAppServicesInitialization(false);
 
-var app = builder.Build();
+using var app = builder.Build();
 
 app.InitializeAppServices();
 
@@ -282,7 +327,7 @@ builder.ConfigureServices(services =>
 The built app exposes the root service provider:
 
 ```csharp
-var app = builder.Build();
+using var app = builder.Build();
 
 var service = app.Services.GetRequiredService<MyService>();
 ```
@@ -369,4 +414,4 @@ Issues and PRs are welcome. Keep PRs focused, minimal, and consistent with the r
 
 ## License
 
-PhotinoX.App is licensed under **Apache‑2.0**.
+PhotinoX.App is licensed under **Apache-2.0**.

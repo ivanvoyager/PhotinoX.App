@@ -22,6 +22,7 @@ public sealed class PhotinoAppBuilder
 
     private Func<IServiceProvider>? _createServiceProvider;
     private Action<PhotinoApplication>? _configureApplication;
+    private Action<PhotinoApp>? _beforeDispose;
     private Func<PhotinoApp, PhotinoWindow>? _mainWindowFactory;
 
     internal PhotinoAppBuilder(PhotinoAppOptions appOptions, bool useDefaults = true)
@@ -78,8 +79,6 @@ public sealed class PhotinoAppBuilder
                 return new LoggingBuilder(Services);
             }
         }
-
-        private set;
     }
 
     private PhotinoEnvironment CreateEnvironment(PhotinoAppOptions appOptions, bool useDefaults)
@@ -150,7 +149,26 @@ public sealed class PhotinoAppBuilder
     public PhotinoAppBuilder ConfigureApplication(Action<PhotinoApplication> configureApplication)
     {
         ArgumentNullException.ThrowIfNull(configureApplication);
-        _configureApplication = configureApplication;
+        _configureApplication += configureApplication;
+        return this;
+    }
+    /// <summary>
+    /// Configures a callback invoked before the application's service provider is disposed.
+    /// </summary>
+    /// <param name="callback">
+    /// The callback to invoke before disposing the application services.
+    /// </param>
+    /// <returns>The current <see cref="PhotinoAppBuilder"/>.</returns>
+    /// <remarks>
+    /// Callbacks are invoked in registration order when <see cref="PhotinoApp.Dispose"/> or
+    /// <see cref="PhotinoApp.DisposeAsync"/> is called. Application services remain available
+    /// while callbacks are executing. If a callback throws an exception, subsequent callbacks
+    /// are not invoked, but the service provider is still disposed.
+    /// </remarks>
+    public PhotinoAppBuilder ConfigureBeforeDispose(Action<PhotinoApp> callback)
+    {
+        ArgumentNullException.ThrowIfNull(callback);
+        _beforeDispose += callback;
         return this;
     }
 
@@ -192,7 +210,7 @@ public sealed class PhotinoAppBuilder
     {
         ConfigureDefaultLogging();
 
-        IServiceProvider serviceProvider = _createServiceProvider != null
+        IServiceProvider serviceProvider = _createServiceProvider is not null
             ? _createServiceProvider()
             : _services.BuildServiceProvider(new ServiceProviderOptions
             {
@@ -200,39 +218,87 @@ public sealed class PhotinoAppBuilder
                 ValidateOnBuild = Environment.IsDevelopment
             });
 
-        // Mark the service collection as read-only to prevent future modifications
-        _services.MakeReadOnly();
+        PhotinoApplication? application = null;
+        PhotinoApp? app = null;
+        try
+        {
+            // Mark the service collection as read-only to prevent future modifications
+            _services.MakeReadOnly();
 
-        var appSettings = serviceProvider.GetService<IOptions<PhotinoAppSettings>>()?.Value;
+            var appSettings = serviceProvider.GetService<IOptions<PhotinoAppSettings>>()?.Value;
 
-        var application = new PhotinoApplication();
+            application = new PhotinoApplication();
+            ConfigureApplication(application, appSettings);
+
+            app = new PhotinoApp(serviceProvider, application, _mainWindowFactory, _beforeDispose);
+
+            // Initialize application services that need access to the built root service provider.
+            if (_initializeAppServices)
+                app.InitializeAppServices();
+
+            return app;
+        }
+        catch (Exception)
+        {
+            SafeDispose(serviceProvider, application, app);
+            throw;
+        }
+    }
+
+    private static void SafeDispose(IServiceProvider serviceProvider, PhotinoApplication? application, PhotinoApp? app)
+    {
+        try
+        {
+            if (app is not null)
+            {
+                try
+                {
+                    app.Dispose();
+                }
+                finally
+                {
+                    app.ResetCurrent();
+                }
+            }
+            else
+            {
+                try
+                {
+                    if (serviceProvider is IAsyncDisposable asyncDisposable)
+                        asyncDisposable.DisposeAsync().AsTask().GetAwaiter().GetResult();
+                    else
+                        (serviceProvider as IDisposable)?.Dispose();
+                }
+                finally
+                {
+                    application?.ResetCurrent();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Preserve the original build exception.
+            var message = $"Exception during safe dispose: {ex}";
+            Trace.WriteLine(message);
+            Debug.Fail(message);
+        }
+    }
+
+    private void ConfigureApplication(PhotinoApplication application, PhotinoAppSettings? appSettings)
+    {
         if (!string.IsNullOrWhiteSpace(appSettings?.ApplicationName))
-        {
             application.Name = appSettings.ApplicationName;
-        }
+
         if (appSettings?.NotificationsEnabled is { } notificationsEnabled)
-        {
             application.NotificationsEnabled = notificationsEnabled;
-        }
+
         if (!string.IsNullOrWhiteSpace(appSettings?.NotificationRegistrationId))
-        {
             application.NotificationRegistrationId = appSettings.NotificationRegistrationId;
-        }
+
         if (!string.IsNullOrWhiteSpace(appSettings?.Runtime.WebView2RuntimePath))
-        {
             application.SetWebView2RuntimePath(appSettings.Runtime.WebView2RuntimePath);
-        }
+
         _configureApplication?.Invoke(application);
-
-        var app = new PhotinoApp(serviceProvider, application, _mainWindowFactory);
-
-        // Initialize application services that need access to the built root service provider.
-        if (_initializeAppServices)
-        {
-            app.InitializeAppServices();
-        }
-
-        return app;
     }
 
     private void ConfigureDefaultLogging()

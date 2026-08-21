@@ -9,4 +9,5 @@
     <File Path="README.md" />
   </Folder>
   <Project Path="src/PhotinoX.App/PhotinoX.App.csproj" />
+  <Project Path="tests/PhotinoX.App.Tests.csproj" />
 </Solution>

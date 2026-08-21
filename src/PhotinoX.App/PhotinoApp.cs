@@ -13,10 +13,19 @@ namespace PhotinoX.App;
 /// The native application lifetime and message loop are provided by the underlying
 /// <see cref="PhotinoApplication"/>.
 /// </remarks>
-public sealed class PhotinoApp : IDisposable, IAsyncDisposable
+public sealed partial class PhotinoApp : IDisposable, IAsyncDisposable
 {
+    private static class States
+    {
+        public const int NotDisposed = 0;// default value of _state
+        public const int Disposing = 1;
+        public const int Disposed = 2;
+    }
+
     private readonly Func<PhotinoApp, PhotinoWindow>? _mainWindowFactory;
-    private int _disposed;
+    private readonly Action<PhotinoApp>? _beforeDispose;
+    private int _isRunning;
+    private int _state;
     private int _appServicesInitialized;
 
     private static int s_appCreated;
@@ -24,17 +33,19 @@ public sealed class PhotinoApp : IDisposable, IAsyncDisposable
     internal PhotinoApp(
         IServiceProvider services,
         PhotinoApplication application,
-        Func<PhotinoApp, PhotinoWindow>? mainWindowFactory = null)
+        Func<PhotinoApp, PhotinoWindow>? mainWindowFactory = null,
+        Action<PhotinoApp>? beforeDispose = null)
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(application);
 
         if (Interlocked.CompareExchange(ref s_appCreated, 1, 0) == 1)
-            throw new InvalidOperationException($"Cannot create more than one {typeof(PhotinoApp).FullName} instance.");
+            ThrowApplicationAlreadyCreated();
 
         Services = services;
         Application = application;
         _mainWindowFactory = mainWindowFactory;
+        _beforeDispose = beforeDispose;
 
         Current = this;
     }
@@ -62,7 +73,10 @@ public sealed class PhotinoApp : IDisposable, IAsyncDisposable
     /// </summary>
     public PhotinoEnvironment Environment => Services.GetRequiredService<PhotinoEnvironment>();
 
-    internal PhotinoApplication Application { get; }
+    /// <summary>
+    /// Gets the underlying Photino application.
+    /// </summary>
+    public PhotinoApplication Application { get; }
 
     /// <summary>
     /// Gets the dispatcher associated with the underlying Photino application.
@@ -75,18 +89,14 @@ public sealed class PhotinoApp : IDisposable, IAsyncDisposable
     /// <exception cref="InvalidOperationException">
     /// Thrown when the main window has not been created yet.
     /// </exception>
-    public PhotinoWindow MainWindow
-    {
-        get => field ?? throw new InvalidOperationException("MainWindow is not created yet.");
-        private set;
-    }
+    public PhotinoWindow MainWindow => Application.MainWindow ?? ThrowMainWindowNotCreated();
 
     private PhotinoWindow CreateMainWindow()
     {
-        ThrowIfDisposed();
+        ThrowIfDisposingOrDisposed();
 
         if (_mainWindowFactory is null)
-            throw new InvalidOperationException("No main window configured.");
+            ThrowMainWindowNotConfigured();
 
         return _mainWindowFactory(this);
     }
@@ -99,7 +109,7 @@ public sealed class PhotinoApp : IDisposable, IAsyncDisposable
     /// </remarks>
     public void InitializeAppServices()
     {
-        ThrowIfDisposed();
+        ThrowIfDisposingOrDisposed();
 
         if (Interlocked.CompareExchange(ref _appServicesInitialized, 1, 0) != 0)
             return;
@@ -135,19 +145,19 @@ public sealed class PhotinoApp : IDisposable, IAsyncDisposable
     /// </exception>
     public int Run(PhotinoWindow? mainWindow = null)
     {
-        ThrowIfDisposed();
+        ThrowIfDisposingOrDisposed();
+
+        if (Interlocked.CompareExchange(ref _isRunning, 1, 0) != 0)
+            ThrowApplicationAlreadyRunning();
 
         try
         {
             mainWindow ??= CreateMainWindow();
-
-            MainWindow = mainWindow;
-
             return Application.Run(mainWindow);
         }
         finally
         {
-            Dispose();
+            Volatile.Write(ref _isRunning, 0);
         }
     }
 
@@ -156,10 +166,24 @@ public sealed class PhotinoApp : IDisposable, IAsyncDisposable
     /// </summary>
     public void Dispose()
     {
-        if (Interlocked.Exchange(ref _disposed, 1) != 0)
+        if (Interlocked.CompareExchange(ref _state, States.Disposing, States.NotDisposed) != States.NotDisposed)
             return;
 
-        (Services as IDisposable)?.Dispose();
+        try
+        {
+            try
+            {
+                _beforeDispose?.Invoke(this);
+            }
+            finally
+            {
+                (Services as IDisposable)?.Dispose();
+            }
+        }
+        finally
+        {
+            Volatile.Write(ref _state, States.Disposed);
+        }
     }
 
     /// <summary>
@@ -170,17 +194,36 @@ public sealed class PhotinoApp : IDisposable, IAsyncDisposable
     /// </returns>
     public async ValueTask DisposeAsync()
     {
-        if (Interlocked.Exchange(ref _disposed, 1) != 0)
+        if (Interlocked.CompareExchange(ref _state, States.Disposing, States.NotDisposed) != States.NotDisposed)
             return;
 
-        if (Services is IAsyncDisposable asyncDisposable)
-            await asyncDisposable.DisposeAsync().ConfigureAwait(false);
-        else
-            (Services as IDisposable)?.Dispose();
+        try
+        {
+            try
+            {
+                _beforeDispose?.Invoke(this);
+            }
+            finally
+            {
+                if (Services is IAsyncDisposable asyncDisposable)
+                    await asyncDisposable.DisposeAsync().ConfigureAwait(false);
+                else
+                    (Services as IDisposable)?.Dispose();
+            }
+        }
+        finally
+        {
+            Volatile.Write(ref _state, States.Disposed);
+        }
     }
 
-    private void ThrowIfDisposed()
+    internal void ResetCurrent()
     {
-        ObjectDisposedException.ThrowIf(Volatile.Read(ref _disposed) != 0, this);
+        Application.ResetCurrent();
+
+        if (ReferenceEquals(Current, this))
+            Current = null!;
+
+        Volatile.Write(ref s_appCreated, 0);
     }
 }

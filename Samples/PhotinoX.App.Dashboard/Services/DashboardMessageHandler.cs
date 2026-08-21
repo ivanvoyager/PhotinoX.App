@@ -4,23 +4,12 @@ using Photino.NET;
 
 namespace PhotinoX.App.Dashboard;
 
-public sealed class DashboardMessageHandler
+public sealed class DashboardMessageHandler(
+    DashboardSnapshotService snapshots,
+    DashboardState state,
+    ILogger<DashboardMessageHandler> logger)
 {
-    private readonly DashboardSnapshotService _snapshots;
-    private readonly DashboardState _state;
-    private readonly ILogger<DashboardMessageHandler> _logger;
-
     private PhotinoWindow? _detailsWindow;
-
-    public DashboardMessageHandler(
-        DashboardSnapshotService snapshots,
-        DashboardState state,
-        ILogger<DashboardMessageHandler> logger)
-    {
-        _snapshots = snapshots;
-        _state = state;
-        _logger = logger;
-    }
 
     public void Handle(PhotinoApp app, PhotinoWindow window, string message)
     {
@@ -46,7 +35,7 @@ public sealed class DashboardMessageHandler
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to handle dashboard message.");
+            logger.LogError(ex, "Failed to handle dashboard message.");
             SendError(window, ex.Message);
         }
     }
@@ -72,12 +61,12 @@ public sealed class DashboardMessageHandler
 
         detailsWindow.RegisterClosedHandler((_, _) =>
         {
-            _state.MarkDetailsWindowClosed();
+            state.MarkDetailsWindowClosed();
             _detailsWindow = null;
         });
 
         _detailsWindow = detailsWindow;
-        _state.MarkDetailsWindowOpen();
+        state.MarkDetailsWindowOpen();
 
         detailsWindow.Show();
     }
@@ -86,7 +75,7 @@ public sealed class DashboardMessageHandler
     {
         var payload = new DashboardHostMessage(
             Type: "snapshot",
-            Data: _snapshots.CreateSnapshot(app));
+            Data: snapshots.CreateSnapshot(app));
 
         Send(window, payload);
     }

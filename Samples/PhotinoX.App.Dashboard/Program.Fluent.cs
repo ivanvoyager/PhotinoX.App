@@ -3,7 +3,7 @@ using Photino.NET;
 using PhotinoX.App;
 using PhotinoX.App.Dashboard;
 
-return PhotinoApp.CreateBuilder(args)
+using var app = PhotinoApp.CreateBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddSingleton<DashboardState>();
@@ -36,5 +36,6 @@ return PhotinoApp.CreateBuilder(args)
     {
         application.ShutdownMode = PhotinoShutdownMode.OnMainWindowClose;
     })
-    .Build()
-    .Run();
+    .Build();
+
+return app.Run();
