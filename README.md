@@ -11,6 +11,26 @@ Application builder, dependency injection, configuration, logging, environment, 
 
 `PhotinoX` provides the low-level native-first application, dispatcher, and window API. `PhotinoX.App` adds the application composition layer around it: services, configuration, logging, environment paths, initialization services, and reusable window settings.
 
+`PhotinoX.App` also provides the application composition and lifetime foundation used by [PhotinoX.Blazor](https://github.com/ivanvoyager/PhotinoX.Blazor).
+
+### Package architecture
+
+```text
+PhotinoX.Native
+└── PhotinoX
+    └── PhotinoX.App
+        └── PhotinoX.Blazor
+```
+
+Each layer builds on the previous one:
+
+- `PhotinoX.Native` provides the native window and WebView runtime.
+- `PhotinoX` exposes the managed application, dispatcher, and window APIs.
+- `PhotinoX.App` adds application composition, configuration, services, and lifetime management.
+- `PhotinoX.Blazor` adds Blazor application and window hosting.
+
+### Features
+
 - Service registration through `IServiceCollection`
 - Configuration through `ConfigurationManager`
 - Logging through `ILoggingBuilder`
