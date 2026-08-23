@@ -240,6 +240,26 @@ Apply a full window configuration:
 var window = new PhotinoWindow().ApplySettings(configuration, app.Environment);
 ```
 
+Linux chromeless window settings can be configured for default, main, and named windows:
+
+```json
+{
+  "PhotinoX": {
+    "MainWindow": {
+      "Linux": {
+        "ChromelessDragRegionHeight": 44,
+        "ChromelessDragRegionLeftInset": 0,
+        "ChromelessDragRegionTopInset": 0,
+        "ChromelessDragRegionRightInset": 120,
+        "ChromelessResizeBorderThickness": 8
+      }
+    }
+  }
+}
+```
+
+These settings configure the initial Linux chromeless drag region and resize border before native window initialization. Dynamic drag and no-drag regions can be configured after initialization through the underlying `PhotinoWindow` API.
+
 ## Environment
 
 `PhotinoEnvironment` exposes `EnvironmentName`, `ApplicationName`, `ContentRootPath`, and `WebRootPath`.
