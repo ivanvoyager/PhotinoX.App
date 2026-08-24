@@ -16,6 +16,11 @@ public sealed class PhotinoLinuxSettings
     public int? ChromelessDragRegionLeftInset { get; set; }
 
     /// <summary>
+    /// Gets or sets the top inset excluded from the native chromeless drag region.
+    /// </summary>
+    public int? ChromelessDragRegionTopInset { get; set; }
+
+    /// <summary>
     /// Gets or sets the right inset excluded from the native chromeless drag region.
     /// </summary>
     public int? ChromelessDragRegionRightInset { get; set; }

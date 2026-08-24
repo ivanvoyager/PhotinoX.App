@@ -128,6 +128,7 @@ public static class PhotinoWindowConfigurationMergeExtensions
             {
                 ChromelessDragRegionHeight = overrides.ChromelessDragRegionHeight ?? defaults.ChromelessDragRegionHeight,
                 ChromelessDragRegionLeftInset = overrides.ChromelessDragRegionLeftInset ?? defaults.ChromelessDragRegionLeftInset,
+                ChromelessDragRegionTopInset = overrides.ChromelessDragRegionTopInset ?? defaults.ChromelessDragRegionTopInset,
                 ChromelessDragRegionRightInset = overrides.ChromelessDragRegionRightInset ?? defaults.ChromelessDragRegionRightInset,
                 ChromelessResizeBorderThickness = overrides.ChromelessResizeBorderThickness ?? defaults.ChromelessResizeBorderThickness
             };

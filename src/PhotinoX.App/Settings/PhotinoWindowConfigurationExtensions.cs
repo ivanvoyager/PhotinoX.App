@@ -239,14 +239,16 @@ public static class PhotinoWindowConfigurationExtensions
 
             if (settings.ChromelessDragRegionHeight is not null ||
                 settings.ChromelessDragRegionLeftInset is not null ||
+                settings.ChromelessDragRegionTopInset is not null ||
                 settings.ChromelessDragRegionRightInset is not null)
             {
                 var current = window.LinuxChromelessSettings;
 
                 window.SetLinuxChromelessDragRegion(
-                    settings.ChromelessDragRegionHeight ?? current.DragRegionHeight,
-                    settings.ChromelessDragRegionRightInset ?? current.DragRegionRightInset,
-                    settings.ChromelessDragRegionLeftInset ?? current.DragRegionLeftInset);
+                    height: settings.ChromelessDragRegionHeight ?? current.DragRegionHeight,
+                    rightInset: settings.ChromelessDragRegionRightInset ?? current.DragRegionRightInset,
+                    leftInset: settings.ChromelessDragRegionLeftInset ?? current.DragRegionLeftInset,
+                    topInset: settings.ChromelessDragRegionTopInset ?? current.DragRegionTopInset);
             }
 
             if (settings.ChromelessResizeBorderThickness is { } resizeBorderThickness)
