@@ -3,6 +3,7 @@
 # PhotinoX.App
 
 [![NuGet Version](https://img.shields.io/nuget/v/PhotinoX.App.svg)](https://www.nuget.org/packages/PhotinoX.App)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/ivanvoyager/PhotinoX.App)
 [![Build](https://github.com/ivanvoyager/PhotinoX.App/actions/workflows/build.yml/badge.svg)](https://github.com/ivanvoyager/PhotinoX.App/actions/workflows/build.yml)
 [![License](https://img.shields.io/github/license/ivanvoyager/PhotinoX.App?label=license)](https://github.com/ivanvoyager/PhotinoX.App/blob/master/LICENSE)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/PhotinoX.App.svg)](https://www.nuget.org/packages/PhotinoX.App)
