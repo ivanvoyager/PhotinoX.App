@@ -41,7 +41,7 @@ public sealed class PhotinoAppBuilder
 
         if (useDefaults)
         {
-            this.UseDefaults(appOptions);
+            PhotinoAppBuilderExtensions.UseDefaults(this, appOptions);
         }
 
         Debug.Assert(_configuration.IsValueCreated == useDefaults);
