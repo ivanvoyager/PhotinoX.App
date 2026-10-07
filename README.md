@@ -408,10 +408,11 @@ builder.ConfigureContainer(factory, container =>
 Use `PhotinoX` directly for minimal or fully manual applications. Use `PhotinoX.App` when the app needs a modern .NET-style startup model on top of `PhotinoX`.
 
 - [**PhotinoX**](https://github.com/ivanvoyager/PhotinoX) - managed .NET wrapper around the native layer.
+- [**PhotinoX.Cpp**](https://github.com/ivanvoyager/PhotinoX.Cpp) - a modern cross-platform C++20 desktop application framework built on native OS WebViews.
 - [**PhotinoX.Native**](https://github.com/ivanvoyager/PhotinoX.Native) - native binaries for Windows/macOS/Linux.
-- [**PhotinoX.Blazor**](https://github.com/ivanvoyager/PhotinoX.Blazor) - Blazor integration for native desktop apps.
-- [**PhotinoX.Server**](https://github.com/ivanvoyager/PhotinoX.Server) - optional local static-file server for SPA/static assets.
-- [**PhotinoX.Samples**](https://github.com/ivanvoyager/PhotinoX.Samples) - sample projects showcasing common scenarios.
+- [**PhotinoX.Blazor**](https://github.com/ivanvoyager/PhotinoX.Blazor) - Blazor integration for building native desktop applications with PhotinoX.
+- [**PhotinoX.Server**](https://github.com/ivanvoyager/PhotinoX.Server) - optional local static-file server for SPA and static web assets.
+- [**PhotinoX.Samples**](https://github.com/ivanvoyager/PhotinoX.Samples) - sample projects showcasing common PhotinoX scenarios.
 
 ---
 
