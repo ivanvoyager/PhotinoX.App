@@ -227,6 +227,9 @@ public sealed class PhotinoAppBuilder
 
             var appSettings = serviceProvider.GetService<IOptions<PhotinoAppSettings>>()?.Value;
 
+            if (!string.IsNullOrWhiteSpace(appSettings?.Runtime.WebView2RuntimePath))
+                PhotinoApplication.SetWebView2RuntimePath(appSettings.Runtime.WebView2RuntimePath);
+
             application = new PhotinoApplication();
             ConfigureApplication(application, appSettings);
 
@@ -294,9 +297,6 @@ public sealed class PhotinoAppBuilder
 
         if (!string.IsNullOrWhiteSpace(appSettings?.NotificationRegistrationId))
             application.NotificationRegistrationId = appSettings.NotificationRegistrationId;
-
-        if (!string.IsNullOrWhiteSpace(appSettings?.Runtime.WebView2RuntimePath))
-            application.SetWebView2RuntimePath(appSettings.Runtime.WebView2RuntimePath);
 
         _configureApplication?.Invoke(application);
     }

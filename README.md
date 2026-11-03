@@ -89,6 +89,8 @@ It provides:
 
 The builder configures services, the underlying `PhotinoApplication`, the main-window factory, application initialization, pre-disposal callbacks, and custom service-provider creation.
 
+When using `PhotinoAppBuilder`, use `PhotinoApp.Current` to access the built application. Do not access `PhotinoApplication.Current` before `Build()`, because it creates the underlying `PhotinoApplication` instance and prevents the builder from creating its own application.
+
 Example using the `appsettings.json` configuration shown below:
 
 ```csharp
