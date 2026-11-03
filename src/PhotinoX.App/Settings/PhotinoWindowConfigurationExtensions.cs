@@ -92,6 +92,9 @@ public static class PhotinoWindowConfigurationExtensions
             ArgumentNullException.ThrowIfNull(window);
             ArgumentNullException.ThrowIfNull(settings);
 
+            if (settings.LogVerbosity is { } logVerbosity)
+                window.SetLogVerbosity(logVerbosity);
+
             if (settings.Title is not null)
                 window.SetTitle(settings.Title);
 

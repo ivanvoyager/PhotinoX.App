@@ -42,6 +42,7 @@ public static class PhotinoWindowConfigurationMergeExtensions
             return new PhotinoWindowSettings
             {
                 Title = overrides.Title ?? defaults.Title,
+                LogVerbosity = overrides.LogVerbosity ?? defaults.LogVerbosity,
                 Width = overrides.Width ?? defaults.Width,
                 Height = overrides.Height ?? defaults.Height,
                 Left = overrides.Left ?? defaults.Left,

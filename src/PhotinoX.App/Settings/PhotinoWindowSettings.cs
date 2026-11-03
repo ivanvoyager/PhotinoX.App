@@ -11,6 +11,11 @@ public sealed class PhotinoWindowSettings
     public string? Title { get; set; }
 
     /// <summary>
+    /// Gets or sets the logging verbosity to standard output.
+    /// </summary>
+    public int? LogVerbosity { get; set; }
+
+    /// <summary>
     /// Gets or sets the initial window width in pixels.
     /// </summary>
     public int? Width { get; set; }
