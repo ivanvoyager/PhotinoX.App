@@ -175,6 +175,18 @@ public static class PhotinoWindowConfigurationExtensions
             if (settings.DevToolsEnabled is { } devToolsEnabled)
                 window.SetDevToolsEnabled(devToolsEnabled);
 
+            if (settings.BrowserAcceleratorKeysEnabled is { } browserAcceleratorKeysEnabled)
+                window.SetBrowserAcceleratorKeysEnabled(browserAcceleratorKeysEnabled);
+
+            if (settings.GeneralAutofillEnabled is { } generalAutofillEnabled)
+                window.SetGeneralAutofillEnabled(generalAutofillEnabled);
+
+            if (settings.PasswordAutosaveEnabled is { } passwordAutosaveEnabled)
+                window.SetPasswordAutosaveEnabled(passwordAutosaveEnabled);
+
+            if (settings.ReputationCheckingRequired is { } reputationCheckingRequired)
+                window.SetReputationCheckingRequired(reputationCheckingRequired);
+
             if (settings.GrantBrowserPermissions is { } grantBrowserPermissions)
                 window.SetGrantBrowserPermissions(grantBrowserPermissions);
 

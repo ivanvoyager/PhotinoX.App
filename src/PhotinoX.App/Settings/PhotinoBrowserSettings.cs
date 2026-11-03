@@ -18,11 +18,17 @@ public sealed class PhotinoBrowserSettings
     /// <summary>
     /// Gets or sets whether the default browser context menu is enabled.
     /// </summary>
+    /// <remarks>
+    /// This only works on Windows and Linux.
+    /// </remarks>
     public bool? ContextMenuEnabled { get; set; }
 
     /// <summary>
     /// Gets or sets whether browser zoom is enabled.
     /// </summary>
+    /// <remarks>
+    /// This only works on Windows.
+    /// </remarks>
     public bool? ZoomEnabled { get; set; }
 
     /// <summary>
@@ -36,6 +42,38 @@ public sealed class PhotinoBrowserSettings
     public bool? DevToolsEnabled { get; set; }
 
     /// <summary>
+    /// Gets or sets whether browser-specific accelerator keys are enabled.
+    /// </summary>
+    /// <remarks>
+    /// This only works on Windows.
+    /// </remarks>
+    public bool? BrowserAcceleratorKeysEnabled { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether general form autofill is enabled.
+    /// </summary>
+    /// <remarks>
+    /// This only works on Windows.
+    /// </remarks>
+    public bool? GeneralAutofillEnabled { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether password autosave is enabled.
+    /// </summary>
+    /// <remarks>
+    /// This only works on Windows.
+    /// </remarks>
+    public bool? PasswordAutosaveEnabled { get; set; }
+
+    /// <summary>
+    /// Gets or sets whether Microsoft Defender SmartScreen reputation checking is required.
+    /// </summary>
+    /// <remarks>
+    /// This only works on Windows.
+    /// </remarks>
+    public bool? ReputationCheckingRequired { get; set; }
+
+    /// <summary>
     /// Gets or sets whether browser permission requests are granted automatically.
     /// </summary>
     public bool? GrantBrowserPermissions { get; set; }
@@ -43,6 +81,9 @@ public sealed class PhotinoBrowserSettings
     /// <summary>
     /// Gets or sets whether media autoplay is enabled.
     /// </summary>
+    /// <remarks>
+    /// This only works on Windows and Linux.
+    /// </remarks>
     public bool? MediaAutoplayEnabled { get; set; }
 
     /// <summary>
@@ -68,6 +109,9 @@ public sealed class PhotinoBrowserSettings
     /// <summary>
     /// Gets or sets whether smooth scrolling is enabled.
     /// </summary>
+    /// <remarks>
+    /// This only works on Windows and Linux.
+    /// </remarks>
     public bool? SmoothScrollingEnabled { get; set; }
 
     /// <summary>

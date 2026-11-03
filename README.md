@@ -183,7 +183,11 @@ PhotinoX
       },
       "Browser": {
         "DevToolsEnabled": true,
-        "ContextMenuEnabled": true
+        "ContextMenuEnabled": true,
+        "BrowserAcceleratorKeysEnabled": true,
+        "GeneralAutofillEnabled": true,
+        "PasswordAutosaveEnabled": false,
+        "ReputationCheckingRequired": true
       }
     },
 
